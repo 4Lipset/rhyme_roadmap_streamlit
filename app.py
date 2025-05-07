@@ -32,10 +32,14 @@ if submitted:
 Be kind, supportive, and help them make sense of what they know."""
 
             try:
-                response = openai.ChatCompletion.create(
-                    model="gpt-4",
-                    messages=[{"role": "user", "content": prompt}]
-                )
+                response = client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+response = client.chat.completions.create(
+    model="gpt-4",
+    messages=[{"role": "user", "content": prompt}]
+)
+result = response.choices[0].message.content.strip()
+
                 result = response.choices[0].message.content.strip()
                 st.success("Here's your creative roadmap:")
                 st.markdown(f"---\n{result}")
