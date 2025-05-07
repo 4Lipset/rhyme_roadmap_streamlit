@@ -1,7 +1,10 @@
 
 import streamlit as st
-import openai
 import os
+import openai
+
+# Create OpenAI client
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 st.set_page_config(page_title="The Rhyme Roadmap 🎵", layout="centered")
 
@@ -22,7 +25,6 @@ if submitted:
         st.warning("Please fill in both fields.")
     else:
         with st.spinner("Thinking in rhymes..."):
-            openai.api_key = os.getenv("OPENAI_API_KEY")
             prompt = f"""You are an encouraging, justice-centered songwriting coach. A {grade} student wants to write a song to show they understand this learning outcome: "{outcome}". Guide them through:
 
 1. Brainstorming concepts and metaphors.
@@ -32,14 +34,10 @@ if submitted:
 Be kind, supportive, and help them make sense of what they know."""
 
             try:
-                response = client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
-response = client.chat.completions.create(
-    model="gpt-4",
-    messages=[{"role": "user", "content": prompt}]
-)
-result = response.choices[0].message.content.strip()
-
+                response = client.chat.completions.create(
+                    model="gpt-4",
+                    messages=[{"role": "user", "content": prompt}]
+                )
                 result = response.choices[0].message.content.strip()
                 st.success("Here's your creative roadmap:")
                 st.markdown(f"---\n{result}")
